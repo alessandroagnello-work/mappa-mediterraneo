@@ -1,0 +1,96 @@
+/* Stile base (Small - Mobile/Tablet verticale) */
+.mappa-container {
+  width: 100%;
+  height: 800px; 
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Medium (Tablet orizzontale / Laptop) */
+@media (min-width: 1024px) {
+  .mappa-container {
+    max-width: 1440px;
+    height: 640px; 
+  }
+}
+
+/* Large (Desktop ampi come nell'immagine) */
+@media (min-width: 1440px) {
+  .mappa-container {
+    max-width: 1920px;
+    height: 640px;
+  }
+}
+
+.leaflet-container {
+  background-color: transparent !important; /* Reso trasparente per ereditare il colore gestito in React */
+}
+
+
+/* Evidenziazione del riquadro mappa SOLO quando riceve il focus da tastiera (Tab) */
+.mappa-container:focus-visible,
+.leaflet-container:focus-visible {
+  outline: none !important;
+  /* Doppio bordo inconfondibile: scuro interno, giallo brillante esterno */
+  box-shadow: 
+    0 0 0 4px #242424,    
+    0 0 0 8px #ffdd00 !important; 
+  transition: box-shadow 0.2s ease-in-out;
+  border-radius: 4px;
+}
+
+/* Contrasto netto sui pulsanti zoom */
+.leaflet-bar a {
+  color: #1a1a1a !important;
+  border-bottom: 1px solid #999 !important;
+}
+
+/* Focus evidente sui pulsanti dello zoom SOLO da tastiera */
+.leaflet-bar a:focus-visible {
+  outline: none !important;
+  background-color: #ffdd00 !important;
+  color: #000 !important;
+  box-shadow: 0 0 0 4px #242424 !important;
+}
+
+/* 1. Nasconde la scritta a schermo lasciandola attiva per gli screen reader */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* 2. Rimuove il link di Leaflet dal ciclo del tasto Tab */
+.leaflet-control-attribution a {
+  pointer-events: auto;
+}
+
+/* Elimina le fessure di rendering tra i tasselli raster */
+.leaflet-tile-container img,
+.leaflet-tile {
+  outline: 1px solid transparent;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* Evita lo stacco visivo del canvas raster */
+.leaflet-pane > svg,
+.leaflet-tile-pane {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* -----------------------------------------------------------
+   FILTRO ALTO CONTRASTO PER MAPPA 2 (A COLORI)
+----------------------------------------------------------- */
+/* Incrementa il contrasto matematico SOLO quando è attiva la modalità Alto Contrasto */
+.mappa-alto-contrasto .leaflet-layer {
+  filter: contrast(140%) brightness(95%);
+}
