@@ -148,20 +148,29 @@ Apri il terminale nella cartella del tuo progetto React e installa i pacchetti n
 ## INTEGRAZIONE DELLA MAPPA IN REACT
 
 ### 1. File di stile (`MapLayout.css`)
-Leaflet richiede un'altezza esplicita sul contenitore per non collassare a 0 pixel. Crea il file `MapLayout.css`:
+
+Leaflet calcola il canvas della mappa in base alle dimensioni del suo genitore. Se l'elemento contenitore non ha un'altezza definita esplicitamente in pixel o viewport, collasserà a `0px` rendendo la mappa invisibile.
+
+Crea il file `MapLayout.css` (nella stessa cartella del componente o in `src/styles/`):
 
 ```css
+/* Definisce l'area occupata dalla mappa nella pagina */
 .mappa-container {
   width: 100%;
-  height: 640px;
-  position: relative;
+  height: 640px;      /* Altezza fissa essenziale per il rendering di Leaflet */
+  position: relative; /* Mantiene controlli e tooltip ancorati al riquadro */
 }
 ```
 
 ---
 
 ### 2. Componente Mappa (`src/components/MappaMediterraneo.jsx`)
-Crea il componente che inizializza Leaflet e monta il layer raster dal file `.pmtiles`:
+
+Questo componente si occupa di due compiti principali:
+1. **Inizializzare Leaflet (`MapContainer`):** Definisce centro, livello di zoom e perimetro di navigazione.
+2. **Agganciare il file offline (`PMTilesLayer`):** Utilizza l'hook `useMap()` di `react-leaflet` per iniettare i tasselli raster del file `.pmtiles` direttamente nell'istanza della mappa.
+
+Crea il file `src/components/MappaMediterraneo.jsx`:
 
 ```jsx
 import { useEffect } from 'react';
@@ -170,18 +179,21 @@ import 'leaflet/dist/leaflet.css';
 import { PMTiles, leafletRasterLayer } from 'pmtiles';
 import '../MapLayout.css';
 
-// Limiti geografici dell'area esportata (Sud-Ovest, Nord-Est)
+// 1. Confini geografici: delimitano l'area esportata su QGIS [[Sud, Ovest], [Nord, Est]]
 const MED_BOUNDS = [
   [20.0, -22.0],
   [55.0, 58.0]
 ];
 
+// Sottocomponente per iniettare il layer PMTiles tramite le API native di Leaflet
 function PMTilesLayer({ url }) {
-  const map = useMap();
+  const map = useMap(); // Recupera l'istanza nativa di Leaflet creata da MapContainer
 
   useEffect(() => {
-    // Carica il file PMTiles dalla cartella public/
+    // Inizializza l'archivio PMTiles puntando al file statico in /public
     const p = new PMTiles(url);
+    
+    // Genera il layer raster leggendo i tasselli immagine (JPG/PNG)
     const layer = leafletRasterLayer(p, {
       minZoom: 5,
       maxZoom: 10
@@ -189,7 +201,7 @@ function PMTilesLayer({ url }) {
 
     layer.addTo(map);
 
-    // Pulizia del layer allo smontaggio del componente
+    // Cleanup: rimuove il layer quando il componente viene smontato (evita duplicazioni di memoria)
     return () => {
       if (map.hasLayer(layer)) {
         map.removeLayer(layer);
@@ -197,13 +209,14 @@ function PMTilesLayer({ url }) {
     };
   }, [map, url]);
 
-  return null;
+  return null; // Non renderizza elementi DOM propri: opera solo sull'istanza Leaflet
 }
 
 export default function MappaMediterraneo() {
   return (
     <div className="mappa-container">
-      <MapContainer '100%' '100%', 16.0]} center="{[38.0," height: maxBounds="{MED_BOUNDS}" maxBoundsViscosity="{1.0}" maxZoom="{10}" minZoom="{5}" style="{{" width: zoom="{5}" }}>
+      <MapContainer '100%' '100%', (.mappa-container) (1.0 (Stretto // 16.0]} Blocca Coordinate Impedisce Messina) Occupa QGIS Zoom all'utente annulla apertura bacino bordi center="{[38.0," centrali coincidere con da dall'area del deve di div esportato fuori genitore height: i il iniziale: inquadra interamente l'effetto l'intero la lo mappa massimo: maxBounds="{MED_BOUNDS}" maxBoundsViscosity="{1.0}" maxZoom minZoom="{5}" oltre rigidamente rimbalzo/elastico) rimpicciolire ritagliata scaricati spazio style="{{" tasselli trascinare width: zoom="{5}" }}>
+        {/* Percorso relativo al file presente nella cartella /public del progetto */}
         <PMTilesLayer url="/mappa_mediterraneo.pmtiles"/>
       </MapContainer>
     </div>
@@ -211,17 +224,23 @@ export default function MappaMediterraneo() {
 }
 ```
 
+#### Dettaglio dei parametri utilizzati:
+* **`minZoom` e `maxZoom` (5 - 10):** Devono riflettere esattamente i livelli generati nella procedura di QGIS. Se l'utente tenta uno zoom a un livello non scaricato (es. zoom 11), il browser richiederebbe tasselli inesistenti generando errori 404 o riquadri vuoti.
+* **`maxBounds` e `maxBoundsViscosity: 1.0`:** Creano un perimetro invalicabile attorno alle coordinate del Mediterraneo ritagliate. Il valore di viscosità `1.0` rende le pareti completamente rigide, evitando che trascinando la mappa si visualizzi lo sfondo grigio privo di dati.
+* **`url="/mappa_mediterraneo.pmtiles"`:** Qualsiasi risorsa posizionata nella root di `public/` in Vite o React viene servita direttamente alla radice del server locale (`http://localhost:5173/mappa_mediterraneo.pmtiles`), rendendola immediatamente accessibile alla libreria senza bisogno di import tramite `require` o percorsi relativi complessi.
+
 ---
 
 ### 3. Rendering del componente (`App.jsx`)
-Importa e inserisci la mappa nel punto desiderato della tua applicazione:
+
+Per visualizzare la mappa è sufficiente importare il componente all'interno dell'albero dell'applicazione (es. in `App.jsx` o nella pagina desiderata):
 
 ```jsx
 import MappaMediterraneo from './components/MappaMediterraneo';
 
 export default function App() {
   return (
-    <main>
+    <main style={{ padding: '20px' }}>
       <h1>Mappa Offline del Mediterraneo</h1>
       <MappaMediterraneo/>
     </main>
