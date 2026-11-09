@@ -106,7 +106,7 @@ Una volta caricata la mappa base (visibile nel pannello "Layers" in basso a sini
    - **Quality:** `85`
    - **Output file (MBTiles):** Clicca sui tre puntini `...` a destra, seleziona **Save to File...**, indica la cartella di destinazione e nomina il file (es. `mappa_mediterraneo.mbtiles`).
 
-<img src="public/imageTutorial/EsempioParametriConnessione.png" width="600" alt="Parametri esportazione MBTiles">
+<img src="public/imageTutorial/EsempioParametriConversione.png" width="600" alt="Parametri esportazione MBTiles">
 
 5. Clicca sul pulsante **Run** (Esegui) in basso a destra. Il download richiederà alcuni minuti in base alla velocità della connessione.
 
