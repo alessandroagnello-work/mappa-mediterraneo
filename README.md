@@ -57,7 +57,7 @@ Ecco un esempio di URL per la mappa Esri Topo:
 `https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}`
 
 
-<img src="public/imageTutorial/Name&UrlNewConnection" width="600" alt="Nome e url connessione">
+<img src="public/imageTutorial/Name&UrlNewConnection.png" width="600" alt="Nome e url connessione">
 
 *(Nota: Questo URL usa lo standard Slippy Map. Le variabili {z}, {y} e {x} dicono a QGIS di calcolare e scaricare dinamicamente il livello di zoom, la latitudine e la longitudine dei tasselli dell'area che stiamo inquadrando).*
 
