@@ -170,7 +170,7 @@ import 'leaflet/dist/leaflet.css';
 import { PMTiles, leafletRasterLayer } from 'pmtiles';
 import '../MapLayout.css';
 
-// Limiti geografici dell'area esportata (Sud-Ovest, Nord-Est)
+// Limiti geografici del Mediterraneo (Sud-Ovest, Nord-Est)
 const MED_BOUNDS = [
   [20.0, -22.0],
   [55.0, 58.0]
@@ -203,12 +203,22 @@ function PMTilesLayer({ url }) {
 export default function MappaMediterraneo() {
   return (
     <div className="mappa-container">
-      <MapContainer '100%' '100%', 16.0]} center="{[38.0," height: maxBounds="{MED_BOUNDS}" maxBoundsViscosity="{1.0}" maxZoom="{10}" minZoom="{5}" style="{{" width: zoom="{5}" }}>
-        <PMTilesLayer url="/mappa_mediterraneo.pmtiles"/>
+      <MapContainer
+        center={[38.0, 16.0]}
+        zoom={5}
+        minZoom={5}
+        maxZoom={10}
+        maxBounds={MED_BOUNDS}
+        maxBoundsViscosity={1.0}
+        style={{ height: '100%', width: '100%' }}
+      >
+        <PMTilesLayer url="/med_topo_it_z10.pmtiles" />
       </MapContainer>
     </div>
   );
 }
+
+
 ```
 
 ---
