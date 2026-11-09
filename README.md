@@ -61,6 +61,8 @@ Ecco un esempio di URL per la mappa Esri Topo:
 
 *(Nota: Questo URL usa lo standard Slippy Map. Le variabili {z}, {y} e {x} dicono a QGIS di calcolare e scaricare dinamicamente il livello di zoom, la latitudine e la longitudine dei tasselli dell'area che stiamo inquadrando).*
 
+3. Una volta che nella barra dove abbiamo cliccato precedentemente XYZ Tiles, mostra il contenuto con la mappa creata, sposta tramite il drug del mouse la XYZ Tiles a Layers per visualizzare a schermo la mappa importata
+
 ---
 
 #### METODO 2: Installare QuickMapServices
@@ -71,7 +73,9 @@ Per trovare facilmente gli URL delle mappe senza doverli cercare su internet o i
 2. Cerca `QuickMapServices`, seleziona **NextGIS QuickMapServices** dalla lista e clicca su **Install Plugin**.
 3. Una volta installato, vai nel menu in alto **Web > QuickMapServices** e seleziona la mappa da scaricare (come ad esempio ESRI / ESRI TOPO)
 
-<img src="public/imageTutorial/ImportViaPlugin" width="600" alt="Import tramite plugin">
+<img src="public/imageTutorial/ImportViaPlugin.png" width="600" alt="Import tramite plugin">
+
+Una volta selezionato, la mappa si creerà automaticamente nei Layers visibili
 
 
 ---
