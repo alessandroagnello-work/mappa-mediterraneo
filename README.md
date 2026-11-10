@@ -56,6 +56,11 @@ Per importare una mappa gia esistente online, possiamo seguire uno dei 2 passagg
 Ecco un esempio di URL per la mappa Esri Topo:
 `https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}`
 
+oppure per una mappa ad alto contrasto (sia in ita e sia in eng):
+
+`https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}&hl=it`
+`https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}&hl=en`
+
 
 <img src="public/imageTutorial/Name&UrlNewConnection.png" width="600" alt="Nome e url connessione">
 
@@ -93,15 +98,19 @@ Una volta caricata la mappa base (visibile nel pannello "Layers" in basso a sini
 4. Nella finestra di configurazione che si apre, imposta i seguenti campi:
    - **Extent (Estensione):** Puoi definire l'area da scaricare in tre modi diversi cliccando sul pulsante a destra del campo:
      - **In base alla vista a schermo (Consigliato se hai già inquadrato l'area):** Clicca sul pulsante e scegli **Use Map Canvas Extent** (*Usa estensione della vista mappa*). QGIS utilizzerà i bordi visibili attualmente a schermo nel tuo progetto.
-     - **Tramite coordinate manuali (Mediterraneo completo):** Incolla direttamente i valori:
+     - **Tramite coordinate manuali (Mediterraneo completo):** Incolla direttamente i valori come ad esempio:
+
        ```text
        -22.0, 20.0, 58.0, 55.0
        ```
+
+      *(Nota: questi rappresentano i valori seguenti: ovest, sud, est, nord).*
+
      - **Selezione visiva a mano libera:** Clicca sul pulsante e scegli **Draw on Canvas** (*Disegna sulla vista mappa*), poi trascina il cursore sul foglio di lavoro disegnando un rettangolo attorno all'area desiderata.
      
    - **Minimum zoom:** `5`
-   - **Maximum zoom:** `10`  
-     *(Nota: Evitare zoom superiori a 10 o 11: ogni livello aggiuntivo quadruplica il numero di tasselli, facendo esplodere il peso del file oltre svariati gigabyte).*
+   - **Maximum zoom:** `9`  
+     *(Nota: Evitare zoom superiori a 10 o 11: ogni livello aggiuntivo quadruplica il numero di tasselli, facendo esplodere il peso del file oltre svariati gigabyte, questa versione che stiamo per scaricare con 5 - 9, peserà 50 mb circa rispetto a 5 - 10 che può pesare intorno ai 300 mb).*
    - **Tile format:** `JPG`
    - **Quality:** `85`
    - **Output file (MBTiles):** Clicca sui tre puntini `...` a destra, seleziona **Save to File...**, indica la cartella di destinazione e nomina il file (es. `mappa_mediterraneo.mbtiles`).
@@ -114,7 +123,7 @@ Una volta caricata la mappa base (visibile nel pannello "Layers" in basso a sini
 
 
 
-# INSTALLAZIONE PMTILES STEP BY STEP AMBIENTE LINUX
+# INSTALLAZIONE PMTILES
 
 Per installarlo, segui direttamente la guida presente in questo link:
 
@@ -184,7 +193,7 @@ function PMTilesLayer({ url }) {
     const p = new PMTiles(url);
     const layer = leafletRasterLayer(p, {
       minZoom: 5,
-      maxZoom: 10
+      maxZoom: 9
     });
 
     layer.addTo(map);
@@ -207,7 +216,7 @@ export default function MappaMediterraneo() {
         center={[38.0, 16.0]}
         zoom={5}
         minZoom={5}
-        maxZoom={10}
+        maxZoom={9}
         maxBounds={MED_BOUNDS}
         maxBoundsViscosity={1.0}
         style={{ height: '100%', width: '100%' }}
@@ -238,3 +247,4 @@ export default function App() {
   );
 }
 ```
+

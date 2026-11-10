@@ -15,7 +15,7 @@ function PMTilesLayer({ url }) {
   useEffect(() => {
     const p = new PMTiles(url);
     const layer = leafletRasterLayer(p, {
-      maxZoom: 10
+      maxZoom: 9
     });
     
     layer.addTo(map);
@@ -49,11 +49,9 @@ export default function MappaMediterraneo({ language = 'it' }) {
   if (highContrast) {
     currentMapUrl = language === 'it' 
       ? "/med_color_it_hc.pmtiles" 
-      : "/med_color_en_hc.pmtiles";
+      : "/med_color_hc_9.pmtiles";
   } else {
-    currentMapUrl = language === 'it' 
-      ? "/med_topo_it_z10.pmtiles" 
-      : "/med_topo_en_z10.pmtiles";
+    currentMapUrl = "/med_topo_z10.pmtiles";
   }
 
   const currentBgColor = highContrast ? "#e8edf2" : "#f2efe9";
@@ -100,7 +98,7 @@ export default function MappaMediterraneo({ language = 'it' }) {
           center={[38.0, 16.0]}
           zoom={5}
           minZoom={5}
-          maxZoom={10}
+          maxZoom={9}
           maxBounds={MED_BOUNDS}
           maxBoundsViscosity={1.0}
           keyboard={false} 
